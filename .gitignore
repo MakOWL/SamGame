@@ -1,0 +1,9 @@
+# Generated build files
+build/
+
+# VS Code local configuration
+.vscode/
+
+# Temporary files
+*.tmp
+*.log
