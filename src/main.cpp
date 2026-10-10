@@ -1,6 +1,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <vector>
 
 int main()
 {
@@ -11,6 +12,25 @@ int main()
     );
 
     window.setFramerateLimit(60);
+
+std::vector<sf::Texture> walkTextures;
+for (int i = 1; i <= 4; i++)
+{
+    std::string path = "assets/sprites/walk/left/walk2 LEFT"
+                     + std::to_string(i) + ".png";
+
+    sf::Texture texture;
+
+    if (!texture.loadFromFile(path))
+    {
+        return -1;
+    }
+
+    walkTextures.push_back(std::move(texture));
+}
+
+sf::Clock animationClock;
+std::size_t currentFrame = 0;
 
     // Load Sam's image into a texture
 sf::RectangleShape testRectangle({100.f, 100.f});
@@ -33,8 +53,6 @@ std::cout << "SUCCESS: Sam's texture loaded!\n";
 
     // Keep pixel art sharp when scaled
     texture.setSmooth(false);
-
-    
 
     // Create a sprite using the texture
     sf::Sprite sam(texture);
@@ -76,7 +94,13 @@ std::cout << "SUCCESS: Sam's texture loaded!\n";
             }
         }
 
-
+        if (animationClock.getElapsedTime().asSeconds() >= 0.15f)
+        {
+            sam.setTexture(walkTextures[currentFrame], true);
+            currentFrame++;
+            animationClock.restart();
+            if(currentFrame == 4) currentFrame = 0;
+        }
         // Clear the previous frame
         window.clear(sf::Color(30, 30, 40));
         
